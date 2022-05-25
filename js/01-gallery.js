@@ -7,7 +7,7 @@ const galleryContainer = document.querySelector(".gallery")
 
 const galleryItemsEl = galleryItems.map((item) => {
     return `<div class="gallery__item">
-  <a class="gallery__link" href="${item.original}" rel="noopener noreferrer" target="_blank">
+  <a class="gallery__link" href="${item.original}">
     <img
       class="gallery__image"
       src="${item.preview}"
@@ -20,15 +20,33 @@ const galleryItemsEl = galleryItems.map((item) => {
 
 galleryContainer.innerHTML = galleryItemsEl;
 
-// galleryContainer.addEventListener('click', e => {
-//     if (e.target.dataset.source) {
+// galleryContainer.addEventListener('click', (e) => {
+   
 //       const instance = basicLightbox.create(`
 //     <img src="${e.target.href}" width="800" height="600">
 // `)
 //         instance.show()
 //     }
-// })
+// )
 
-const imageEl = document.querySelector(".gallery__link")
+galleryContainer.onclick = (e) => {
+  if (e.target.nodeName === "IMG") {
+    const instance = basicLightbox.create(`
+		<img width="800" height="600" src="${e.target.dataset.source}">
+	`)
+    instance.show();
 
-imageEl.addEventListener("click", (e) => console.log(e.target))
+    const isModalOpen = instance.visible();
+
+    if (isModalOpen) {
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          instance.close();
+        }
+      })
+    }
+  }
+  return false;
+}
+
+
