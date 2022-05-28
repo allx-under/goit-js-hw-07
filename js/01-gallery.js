@@ -5,7 +5,10 @@ console.log(galleryItems);
 
 const galleryContainer = document.querySelector(".gallery")
 
-const galleryItemsEl = galleryItems.map((item) => {
+addGalleryItemsToHtml(createGalleryItems(galleryItems));
+
+function createGalleryItems(items) {
+  return items.map((item) => {
     return `<div class="gallery__item">
   <a class="gallery__link" href="${item.original}">
     <img
@@ -16,37 +19,33 @@ const galleryItemsEl = galleryItems.map((item) => {
     />
   </a>
 </div>`
-}).join("");
+  }).join("");
+}
 
-galleryContainer.innerHTML = galleryItemsEl;
+function addGalleryItemsToHtml(items) {
+galleryContainer.innerHTML = items;
 
-// galleryContainer.addEventListener('click', (e) => {
-   
-//       const instance = basicLightbox.create(`
-//     <img src="${e.target.href}" width="800" height="600">
-// `)
-//         instance.show()
-//     }
-// )
+}
 
 galleryContainer.onclick = (e) => {
   if (e.target.nodeName === "IMG") {
-    const instance = basicLightbox.create(`
+    const galleryImage = basicLightbox.create(`
 		<img width="800" height="600" src="${e.target.dataset.source}">
 	`)
-    instance.show();
+    galleryImage.show();
 
-    const isModalOpen = instance.visible();
-
-    if (isModalOpen) {
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          instance.close();
-        }
-      })
-    }
+    onClickEscapeBtnCloseImg(galleryImage);
   }
   return false;
 }
 
+function onClickEscapeBtnCloseImg(img) {
+if (img.visible()) {
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          img.close();
+        }
+      })
+    }
+}
 
